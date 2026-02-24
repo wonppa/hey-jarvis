@@ -55,9 +55,10 @@ function buildConfig() {
       port: GATEWAY_PORT,
       bind: "lan",
       trustedProxies: ["0.0.0.0/0"],
-      auth: {
-        mode: "open",  // Allow all connections for Railway
-      },
+    },
+    web: {
+      dmPolicy: "open",
+      allowFrom: ["*"],
     },
   };
 }
