@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
 # Install OpenClaw globally
-RUN npm install -g openclaw@latest
+RUN npm install -g openclaw@2026.2.23
 
 # Create app directory
 WORKDIR /app
