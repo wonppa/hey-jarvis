@@ -204,10 +204,16 @@ const proxy = httpProxy.createProxyServer({
   ws: true,
 });
 
-// Add X-Forwarded-User header for trusted-proxy auth mode
+// Add X-Forwarded-User header for trusted-proxy auth mode (HTTP requests)
 proxy.on("proxyReq", (proxyReq, req) => {
   proxyReq.setHeader("X-Forwarded-User", "user");
   proxyReq.setHeader("X-Forwarded-For", req.ip || "127.0.0.1");
+});
+
+// Add X-Forwarded-User header for trusted-proxy auth mode (WebSocket)
+proxy.on("proxyReqWs", (proxyReq, req, socket) => {
+  proxyReq.setHeader("X-Forwarded-User", "user");
+  proxyReq.setHeader("X-Forwarded-For", req.headers["x-forwarded-for"] || "127.0.0.1");
 });
 
 proxy.on("error", (err, _req, res) => {
@@ -231,8 +237,6 @@ const server = http.createServer(app);
 
 server.on("upgrade", (req, socket, head) => {
   if (gatewayReady) {
-    // Add X-Forwarded-User header for trusted-proxy auth mode
-    req.headers["x-forwarded-user"] = "user";
     proxy.ws(req, socket, head);
   } else {
     socket.destroy();
