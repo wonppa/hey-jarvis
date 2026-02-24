@@ -15,4 +15,4 @@ export OPENCLAW_WORKSPACE_DIR=/data/workspace
 export HOME=/home/openclaw
 export NODE_OPTIONS="--max-old-space-size=1024"
 
-exec su -s /bin/bash openclaw -c "node $NODE_OPTIONS /app/src/server.js"
+exec gosu openclaw env NODE_OPTIONS="$NODE_OPTIONS" OPENCLAW_STATE_DIR="$OPENCLAW_STATE_DIR" OPENCLAW_WORKSPACE_DIR="$OPENCLAW_WORKSPACE_DIR" node /app/src/server.js
