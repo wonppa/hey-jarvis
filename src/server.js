@@ -56,10 +56,6 @@ function buildConfig() {
       bind: "lan",
       trustedProxies: ["0.0.0.0/0"],
     },
-    web: {
-      dmPolicy: "open",
-      allowFrom: ["*"],
-    },
   };
 }
 
