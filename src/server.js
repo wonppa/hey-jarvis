@@ -79,6 +79,21 @@ function ensureConfig() {
   }
 }
 
+function printDashboardUrl() {
+  try {
+    if (fs.existsSync(CONFIG_PATH)) {
+      const config = JSON.parse(fs.readFileSync(CONFIG_PATH, "utf8"));
+      const token = config.gateway?.auth?.token;
+      if (token) {
+        console.log(`[hey-jarvis] Dashboard URL: http://127.0.0.1:${GATEWAY_PORT}/#token=${token}`);
+        console.log(`[hey-jarvis] For Railway, use: https://your-app.railway.app/#token=${token}`);
+      }
+    }
+  } catch (err) {
+    console.error("[hey-jarvis] Failed to read token:", err.message);
+  }
+}
+
 // --- Gateway Process Management ---
 
 function startGateway() {
@@ -129,6 +144,8 @@ function startGateway() {
     ) {
       gatewayReady = true;
       console.log("[hey-jarvis] Gateway is ready.");
+      // Print dashboard URL with token
+      printDashboardUrl();
     }
   });
 
