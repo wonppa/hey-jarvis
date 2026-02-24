@@ -54,9 +54,12 @@ function buildConfig() {
       mode: "local",
       port: GATEWAY_PORT,
       bind: "lan",
+      trustedProxies: ["0.0.0.0/0"],
       auth: {
         mode: "trusted-proxy",
-        trustedProxy: "0.0.0.0/0",
+        trustedProxy: {
+          userHeader: "x-forwarded-user",
+        },
       },
     },
   };
