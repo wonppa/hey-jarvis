@@ -4,6 +4,7 @@ const express = require("express");
 const http = require("http");
 const httpProxy = require("http-proxy");
 const { spawn } = require("child_process");
+
 const fs = require("fs");
 const path = require("path");
 
@@ -12,7 +13,7 @@ const GATEWAY_PORT = 18789;
 const SETUP_PASSWORD = process.env.SETUP_PASSWORD || "";
 const STATE_DIR =
   process.env.OPENCLAW_STATE_DIR ||
-  path.join(process.env.HOME || "/home/openclaw", ".openclaw");
+  path.join(process.env.USERPROFILE || process.env.HOME || "C:\\Users\\wonpp", ".openclaw");
 const CONFIG_PATH = path.join(STATE_DIR, "openclaw.json");
 
 let gatewayProcess = null;
@@ -81,30 +82,42 @@ function ensureConfig() {
 // --- Gateway Process Management ---
 
 function startGateway() {
-  console.log("[hey-jarvis] Starting OpenClaw gateway...");
+  const isWindows = process.platform === "win32";
 
-  gatewayProcess = spawn(
-    "openclaw",
-    [
-      "gateway",
-      "run",
-      "--port",
-      String(GATEWAY_PORT),
-      "--bind",
-      "loopback",
-      "--allow-unconfigured",
-    ],
-    {
-      env: {
-        ...process.env,
-        OPENCLAW_STATE_DIR: STATE_DIR,
-        OPENCLAW_CONFIG_PATH: CONFIG_PATH,
-        OPENCLAW_WORKSPACE_DIR:
-          process.env.OPENCLAW_WORKSPACE_DIR || "/data/workspace",
-      },
-      stdio: ["pipe", "pipe", "pipe"],
-    }
-  );
+  // Platform-specific command
+  const command = isWindows ? "cmd.exe" : "openclaw";
+  const args = isWindows
+    ? [
+        "/c",
+        "openclaw",
+        "gateway",
+        "run",
+        "--port",
+        String(GATEWAY_PORT),
+        "--bind",
+        "loopback",
+        "--allow-unconfigured",
+      ]
+    : [
+        "gateway",
+        "run",
+        "--port",
+        String(GATEWAY_PORT),
+        "--bind",
+        "loopback",
+        "--allow-unconfigured",
+      ];
+
+  gatewayProcess = spawn(command, args, {
+    env: {
+      ...process.env,
+      OPENCLAW_STATE_DIR: STATE_DIR,
+      OPENCLAW_CONFIG_PATH: CONFIG_PATH,
+      OPENCLAW_WORKSPACE_DIR:
+        process.env.OPENCLAW_WORKSPACE_DIR || path.join(STATE_DIR, "workspace"),
+    },
+    stdio: ["pipe", "pipe", "pipe"],
+  });
 
   gatewayProcess.stdout.on("data", (data) => {
     const msg = data.toString().trim();
