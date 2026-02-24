@@ -53,7 +53,7 @@ function buildConfig() {
     gateway: {
       mode: "local",
       port: GATEWAY_PORT,
-      bind: "loopback",
+      bind: "lan",  // Allow external connections for Railway
       trustedProxies: ["0.0.0.0/0"],  // Trust all proxies for Railway
     },
   };
@@ -111,7 +111,7 @@ function startGateway() {
         "--port",
         String(GATEWAY_PORT),
         "--bind",
-        "loopback",
+        "lan",
         "--allow-unconfigured",
       ]
     : [
@@ -120,7 +120,7 @@ function startGateway() {
         "--port",
         String(GATEWAY_PORT),
         "--bind",
-        "loopback",
+        "lan",
         "--allow-unconfigured",
       ];
 
