@@ -55,7 +55,6 @@ function buildConfig() {
       port: GATEWAY_PORT,
       bind: "lan",
       trustedProxies: ["0.0.0.0/0"],
-      requirePairing: false,  // Disable pairing for Railway
     },
   };
 }
