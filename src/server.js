@@ -55,6 +55,9 @@ function buildConfig() {
       port: GATEWAY_PORT,
       bind: "lan",
       trustedProxies: ["0.0.0.0/0"],
+      auth: {
+        mode: "trusted-proxy",
+      },
     },
   };
 }
@@ -198,6 +201,12 @@ const proxy = httpProxy.createProxyServer({
   ws: true,
 });
 
+// Add X-Forwarded-User header for trusted-proxy auth mode
+proxy.on("proxyReq", (proxyReq, req) => {
+  proxyReq.setHeader("X-Forwarded-User", "user");
+  proxyReq.setHeader("X-Forwarded-For", req.ip || "127.0.0.1");
+});
+
 proxy.on("error", (err, _req, res) => {
   console.error("[proxy]", err.message);
   if (res && res.writeHead) {
@@ -219,6 +228,8 @@ const server = http.createServer(app);
 
 server.on("upgrade", (req, socket, head) => {
   if (gatewayReady) {
+    // Add X-Forwarded-User header for trusted-proxy auth mode
+    req.headers["x-forwarded-user"] = "user";
     proxy.ws(req, socket, head);
   } else {
     socket.destroy();
