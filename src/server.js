@@ -58,6 +58,7 @@ function buildConfig() {
     channels: {
       telegram: {
         botToken: "8545752664:AAEOmJJCqTD03xQY0LQbwV3M0LuyUWbOvTs",
+        dmPolicy: "open",
       },
     },
   };
