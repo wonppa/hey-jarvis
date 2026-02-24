@@ -54,6 +54,7 @@ function buildConfig() {
       mode: "local",
       port: GATEWAY_PORT,
       bind: "loopback",
+      trustedProxies: ["0.0.0.0/0"],  // Trust all proxies for Railway
     },
   };
 }
