@@ -57,7 +57,7 @@ function buildConfig() {
       trustedProxies: ["0.0.0.0/0"],
     },
     channels: {
-      web: {
+      defaults: {
         dmPolicy: "open",
         allowFrom: ["*"],
       },
