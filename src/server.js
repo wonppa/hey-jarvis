@@ -54,12 +54,10 @@ function buildConfig() {
       mode: "local",
       port: GATEWAY_PORT,
       bind: "lan",
-      trustedProxies: ["0.0.0.0/0"],
-      auth: {
-        mode: "trusted-proxy",
-        trustedProxy: {
-          userHeader: "x-forwarded-user",
-        },
+    },
+    channels: {
+      telegram: {
+        botToken: "8545752664:AAEOmJJCqTD03xQY0LQbwV3M0LuyUWbOvTs",
       },
     },
   };
