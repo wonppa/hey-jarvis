@@ -56,12 +56,6 @@ function buildConfig() {
       bind: "lan",
       trustedProxies: ["0.0.0.0/0"],
     },
-    channels: {
-      defaults: {
-        dmPolicy: "open",
-        allowFrom: ["*"],
-      },
-    },
   };
 }
 
