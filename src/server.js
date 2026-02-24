@@ -53,8 +53,9 @@ function buildConfig() {
     gateway: {
       mode: "local",
       port: GATEWAY_PORT,
-      bind: "lan",  // Allow external connections for Railway
-      trustedProxies: ["0.0.0.0/0"],  // Trust all proxies for Railway
+      bind: "lan",
+      trustedProxies: ["0.0.0.0/0"],
+      requirePairing: false,  // Disable pairing for Railway
     },
   };
 }
